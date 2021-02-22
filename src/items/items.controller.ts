@@ -1,26 +1,26 @@
-import { Controller, Get, Put, Post, Delete, Body, Req, Res, Param, BadRequestException, NotFoundException } from '@nestjs/common';
-import {CreateItemDTO} from './dto/create-item.dto'
-import {ItemsService} from './items.service'
-import {IItem} from './interfaces/item.interface'
+import { Controller, Get, Put, Post, Delete, Body, Param, NotFoundException } from '@nestjs/common';
+import { CreateItemDTO } from './dto/create-item.dto'
+import { ItemsService } from './items.service'
+import { IItem } from './interfaces/item.interface'
 
 
 @Controller('items')
 export class ItemsController {
 
- // injection
-  constructor(private readonly itemservice: ItemsService) {}
+  // injection
+  constructor(private readonly itemservice: ItemsService) { }
 
   @Get()
   async findAll(): Promise<IItem[]> {
     return this.itemservice.findAll()
   }
- 
+
   @Get(':id')
-  async findOne(@Param('id') id: string): Promise<IItem> {
-      let item = this.itemservice.findOne(id)
-      if (item === undefined) {
-          throw new NotFoundException("No such id")
-      } else { return item}
+  async findOne(@Param('id') id): Promise<IItem> {
+    let item = this.itemservice.findOne(id)
+    if (item === undefined) {
+      throw new NotFoundException("No such id")
+    } else { return item }
   }
 
 
@@ -30,12 +30,12 @@ export class ItemsController {
   }
 
   @Delete(':id')
-  delete(@Param('id') id): string {
-      return `deleted id ${id}`
+  async delete(@Param('id') id) {
+    return this.itemservice.deleteOne(id)
   }
 
   @Put(':id')
-  update(@Param('id') id, @Body() newItem: CreateItemDTO): string {
-      return `updated item with id: ${id} and newItem name ${newItem.name}` 
+  async update(@Param('id') id, @Body() newItem: CreateItemDTO) {
+    return this.itemservice.updateItem(id, newItem)
   }
 }

@@ -6,13 +6,22 @@ export type ItemDocument = Item & Document;
 @Schema()
 export class Item {
   @Prop()
-  name: string;
+  name: string
 
   @Prop()
-  qty: number;
+  qty: number
 
   @Prop()
-  description: string;
+  description: string
+
+  @Prop()
+  created: Date
+
+  @Prop()
+  modified: Date
+
+  @Prop()
+  version: number
 
 }
 
